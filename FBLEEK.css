@@ -4,3 +4,18 @@ body {
 .btn-default {
   text-shadow: none
 }
+.row .title {
+  background-color: #f2bf27
+}
+.row .username {
+  background-color: #f2bf27
+}
+.bosom-none {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+/*Add pading for footer*/
+body .container {
+  padding-bottom: 60px
+}

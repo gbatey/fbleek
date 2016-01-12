@@ -6,9 +6,19 @@ Router.route('/', function() {
   } else {
     Router.go("login")
   }
-},{name: "home"});
+}, {
+  name: "home"
+});
 Router.route('/user');
-Router.route('/post');
+Router.route('/post/:_id',{
+  name: 'post',
+  data: function() {
+    var currentPost = this.params._id;
+    return Posts.findOne({
+      _id: currentPost
+    })
+  }
+});
 Router.route('/search');
 Router.route('/newPost');
 Router.configure({
@@ -17,7 +27,7 @@ Router.configure({
 
 
 Posts = new Meteor.Collection('posts')
-
+Comments = new Meteor.Collection('comments')
 
 if (Meteor.isClient) {
   Template.newPost.helpers({
@@ -42,7 +52,7 @@ if (Meteor.isClient) {
     'submit form': function(event) {      
       event.preventDefault(); 
       var newFile = new FS.File(Session.get('photo'))
-      Images.insert(newFile, function (e, fileObj){
+      Images.insert(newFile, function(e, fileObj) {
         if (e) {
           toastr.error(e.reason)
         } else {
@@ -51,8 +61,9 @@ if (Meteor.isClient) {
           Posts.insert({          
             title: title,
             photo: fileObj._id,
-            createdAt: new Date()     
-          }, function (e, result) {
+            createdAt: new Date(),
+            username: Meteor.user().username     
+          }, function(e, result) {
             if (e) {
               toastr.error(e.reason);
             } else {
@@ -102,11 +113,55 @@ if (Meteor.isClient) {
     }
   });
   Template.home.helpers({
-    posts: function (){
-      return Posts.find({}, {sort: {createdAt: -1}});
+    posts: function() {
+      return Posts.find({}, {
+        sort: {
+          createdAt: -1
+        }
+      });
+    }
+  });
+  Template.picture.helpers({
+    image: function(id) {
+      return Images.findOne({
+        _id: id
+      })
+    }
+  })
+  Template.picture.events({
+    'click .photo': function(event, template) {
+      console.log(this._id);
+      Router.go('post', {_id: this.id}, {}) //not working//
+    }
+  })
+  Template.post.helpers({
+    image: function(id) {
+      return Images.findOne({
+        _id: id
+      })
     },
-    image: function (id){
-      return Images.findOne({_id:id})
+    comments: function(postId) {
+      return Comments.find({
+        postId: postId
+      }, {
+        sort: {
+          createdAt: -1
+        }
+      })
+    }
+  })
+  Template.post.events({
+    "submit .new-task": function(event) {
+      event.preventDefault();
+      var text = event.target.text.value;
+      var currentList = this._id;
+      Comment.insert({
+        text: text,
+        createdAt: new Date(),
+        username: Meteor.user().username,
+        postId: currentPost,
+      });
+      event.target.text.value = "";
     }
   })
 }

@@ -93,11 +93,8 @@
 
 <template name="home">
   <h2>Home</h2>
-  {{#each posts}}
-    <h3>{{title}}</h3>
-    {{#with image photo}}
-      <img src="{{url}}">
-    {{/with}}
+  {{#each post in posts}}
+    {{> picture post}}
   {{/each}}
 </template>
 
@@ -111,5 +108,36 @@
 </template>
 
 <template name="search">
-  <h2>Search</h2>
+  <p></p>
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">
+      <span class="glyphicon glyphicon-search"></span>
+    </span>
+    <input type="text" id="search" class="form-control" placeholder="Search" aria-describedby="basic-addon1">
+  </div>
+  <hr> {{#if isLoading}} searching... {{/if}} {{#each findPosts}}
+  <div class="post">
+    <h4 class="title">
+      <a href="{{git}}">{{{title}}}</a>
+    </h4>
+  </div>
+  {{/each}}
+</template>
+
+<template name="picture">
+  {{#with image photo}}
+  <div class="row">
+    <div class="span12">
+      <img class="img-responsive photo" src="{{url}}">
+    </div>
+  </div>
+  {{/with}}
+  <div class="row">
+    <div class="title col-xs-6">
+      <h3>{{title}}</h3>
+    </div>
+    <div class="username col-xs-6">
+      <h3>{{username}}</h3>
+    </div>
+  </div>
 </template>
