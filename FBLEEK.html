@@ -125,13 +125,13 @@
 </template>
 
 <template name="picture">
-  {{#with image photo}}
-  <div class="row">
+  <div class="row selectPost">
     <div class="span12">
+      {{#with findImage photo}}
       <img class="img-responsive photo" src="{{url}}">
+      {{/with}}
     </div>
   </div>
-  {{/with}}
   <div class="row">
     <div class="title col-xs-6">
       <h3>{{title}}</h3>

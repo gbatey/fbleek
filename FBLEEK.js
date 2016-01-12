@@ -122,16 +122,18 @@ if (Meteor.isClient) {
     }
   });
   Template.picture.helpers({
-    image: function(id) {
+    findImage: function(id) {
       return Images.findOne({
         _id: id
       })
     }
   })
   Template.picture.events({
-    'click .photo': function(event, template) {
+    'click .selectPost': function(event, template) {
       console.log(this._id);
-      Router.go('post', {_id: this.id}, {}) //not working//
+      var currentPost = this._id; // needed to assign this._id to a var before passing into Router.go
+      console.log(this);
+      Router.go('post', {_id: currentPost}) // now working!
     }
   })
   Template.post.helpers({
