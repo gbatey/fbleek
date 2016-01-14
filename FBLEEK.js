@@ -10,7 +10,7 @@ Router.route('/', function() {
   name: "home"
 });
 Router.route('/user');
-Router.route('/post/:_id',{
+Router.route('/post/:_id', {
   name: 'post',
   data: function() {
     var currentPost = this.params._id;
@@ -126,14 +126,20 @@ if (Meteor.isClient) {
       return Images.findOne({
         _id: id
       })
-    }
+    },
+  numberComments: function(){
+    var currentPostId = this._id;
+    return Comments.find({postId: currentPostId}).count();
+  }
   })
   Template.picture.events({
     'click .selectPost': function(event, template) {
       console.log(this._id);
       var currentPost = this._id; // needed to assign this._id to a var before passing into Router.go
       console.log(this);
-      Router.go('post', {_id: currentPost}) // now working!
+      Router.go('post', {
+          _id: currentPost
+        }) // now working!
     }
   })
   Template.post.helpers({
@@ -142,28 +148,38 @@ if (Meteor.isClient) {
         _id: id
       })
     },
-    comments: function(postId) {
+    comments: function() {
+      var currentPostId = this._id
       return Comments.find({
-        postId: postId
+        postId: currentPostId
       }, {
         sort: {
-          createdAt: -1
+          createdAt: 1
         }
       })
     }
   })
+
+  function scrollToBottom() {
+    console.log("scrolltop is " + $('body').scrollTop());
+    $('body').scrollTop($('body').prop("scrollHeight"));
+  }
+  Template.post.rendered = function() {
+    scrollToBottom();
+  };
   Template.post.events({
-    "submit .new-task": function(event) {
+    "submit .comment-form": function(event) {
       event.preventDefault();
       var text = event.target.text.value;
-      var currentList = this._id;
-      Comment.insert({
+      var currentPostId = this._id;
+      Comments.insert({
         text: text,
         createdAt: new Date(),
         username: Meteor.user().username,
-        postId: currentPost,
+        postId: currentPostId
       });
       event.target.text.value = "";
+      scrollToBottom();
     }
   })
 }

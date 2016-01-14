@@ -4,10 +4,7 @@ body {
 .btn-default {
   text-shadow: none
 }
-.row .title {
-  background-color: #f2bf27
-}
-.row .username {
+.bg-gold {
   background-color: #f2bf27
 }
 .bosom-none {

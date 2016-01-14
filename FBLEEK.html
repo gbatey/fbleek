@@ -4,13 +4,13 @@
 
 <template name="main">
   {{#if currentUser}}
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-span12 bg-primary">
-          <img src="img/fbleek-logo-wide.png">
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-span12 bg-primary">
+        <img src="img/fbleek-logo-wide.png">
       </div>
     </div>
+  </div>
   {{/if}}
   <div class="container">
     {{> yield}}
@@ -102,9 +102,7 @@
 
 <template name="home">
   <h2>Home</h2>
-  {{#each post in posts}}
-    {{> picture post}}
-  {{/each}}
+  {{#each post in posts}} {{> picture post}} {{/each}}
 </template>
 
 <template name="user">
@@ -114,6 +112,19 @@
 
 <template name="post">
   <h2>Post</h2>
+  {{> picture this}}
+  <hr>
+  <div class="comments">
+    {{#each comments}}
+    <div class="bubble">@{{username}} - {{text}} - {{tm_now createdAt}}</div>
+    {{/each}}
+    <form class="comment-form">
+      <div class="form-group">
+        <input class="form-control" type="text" name="text" placeholder="Add a comment">
+      </div>
+    </form>
+  </div>
+
 </template>
 
 <template name="search">
@@ -124,29 +135,24 @@
     </span>
     <input type="text" id="search" class="form-control" placeholder="Search" aria-describedby="basic-addon1">
   </div>
-  <hr> {{#if isLoading}} searching... {{/if}} {{#each findPosts}}
-  <div class="post">
-    <h4 class="title">
-      <a href="{{git}}">{{{title}}}</a>
-    </h4>
-  </div>
-  {{/each}}
+  <hr> {{#if isLoading}} searching... {{/if}} {{#each post in findPosts}} {{> picture post}} {{/each}}
 </template>
 
 <template name="picture">
   <div class="row selectPost">
     <div class="span12">
       {{#with findImage photo}}
-      <img class="img-responsive photo" src="{{url}}">
-      {{/with}}
+      <img class="img-responsive photo" src="{{url}}"> {{/with}}
     </div>
   </div>
-  <div class="row">
-    <div class="title col-xs-6">
-      <h3>{{title}}</h3>
-    </div>
-    <div class="username col-xs-6">
-      <h3>{{username}}</h3>
+  <div class="row selectPost bg-gold">
+    <div class="col-xs-123">
+      <span class="badge pull-right">
+        {{numberComments}} comments
+      </span>
+      <h4>{{title}}
+        <small>@{{username}} {{tm_now createdAt}}</small>
+      </h4>
     </div>
   </div>
 </template>
