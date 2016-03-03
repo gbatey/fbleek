@@ -50,6 +50,12 @@ meteor run ios
 
 [These](https://github.com/meteor/meteor/wiki/How-to-run-your-app-on-an-iOS-device) instructions show how.
 
+```
+meteor run ios-device
+```
+* On phone: Settings > General > Device Management > *developer_id*
+* Make sure your phone is on the same wireless network as the computer 
+
 ## What does the app do?
 
 After you register you get four buttons at the bottom of the screen.
