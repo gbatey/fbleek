@@ -53,6 +53,7 @@ meteor run ios
 ```
 meteor run ios-device
 ```
+
 * On phone: Settings > General > Device Management > *developer_id*
 * Make sure your phone is on the same wireless network as the computer 
 
